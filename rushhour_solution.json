@@ -1,0 +1,312 @@
+{
+  "difficulty_level": "51-moves-hardest",
+  "total_moves": 51,
+  "solution_steps": [
+    {
+      "step_number": 1,
+      "piece": "M",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 2,
+      "piece": "F",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 3,
+      "piece": "K",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 4,
+      "piece": "C",
+      "direction": "RIGHT",
+      "spaces": 3
+    },
+    {
+      "step_number": 5,
+      "piece": "H",
+      "direction": "DOWN",
+      "spaces": 2
+    },
+    {
+      "step_number": 6,
+      "piece": "J",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 7,
+      "piece": "E",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 8,
+      "piece": "G",
+      "direction": "DOWN",
+      "spaces": 3
+    },
+    {
+      "step_number": 9,
+      "piece": "B",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 10,
+      "piece": "I",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 11,
+      "piece": "A",
+      "direction": "LEFT",
+      "spaces": 3
+    },
+    {
+      "step_number": 12,
+      "piece": "I",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 13,
+      "piece": "L",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 14,
+      "piece": "B",
+      "direction": "RIGHT",
+      "spaces": 3
+    },
+    {
+      "step_number": 15,
+      "piece": "I",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 16,
+      "piece": "A",
+      "direction": "RIGHT",
+      "spaces": 2
+    },
+    {
+      "step_number": 17,
+      "piece": "G",
+      "direction": "UP",
+      "spaces": 3
+    },
+    {
+      "step_number": 18,
+      "piece": "H",
+      "direction": "UP",
+      "spaces": 3
+    },
+    {
+      "step_number": 19,
+      "piece": "A",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 20,
+      "piece": "E",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 21,
+      "piece": "J",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 22,
+      "piece": "C",
+      "direction": "LEFT",
+      "spaces": 3
+    },
+    {
+      "step_number": 23,
+      "piece": "M",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 24,
+      "piece": "B",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 25,
+      "piece": "K",
+      "direction": "UP",
+      "spaces": 4
+    },
+    {
+      "step_number": 26,
+      "piece": "A",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 27,
+      "piece": "C",
+      "direction": "RIGHT",
+      "spaces": 2
+    },
+    {
+      "step_number": 28,
+      "piece": "H",
+      "direction": "DOWN",
+      "spaces": 3
+    },
+    {
+      "step_number": 29,
+      "piece": "A",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 30,
+      "piece": "K",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 31,
+      "piece": "B",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 32,
+      "piece": "M",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 33,
+      "piece": "C",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 34,
+      "piece": "J",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 35,
+      "piece": "D",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 36,
+      "piece": "E",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 37,
+      "piece": "G",
+      "direction": "DOWN",
+      "spaces": 3
+    },
+    {
+      "step_number": 38,
+      "piece": "A",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 39,
+      "piece": "I",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 40,
+      "piece": "B",
+      "direction": "LEFT",
+      "spaces": 3
+    },
+    {
+      "step_number": 41,
+      "piece": "I",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 42,
+      "piece": "K",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 43,
+      "piece": "L",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 44,
+      "piece": "A",
+      "direction": "RIGHT",
+      "spaces": 1
+    },
+    {
+      "step_number": 45,
+      "piece": "G",
+      "direction": "UP",
+      "spaces": 1
+    },
+    {
+      "step_number": 46,
+      "piece": "E",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 47,
+      "piece": "J",
+      "direction": "DOWN",
+      "spaces": 1
+    },
+    {
+      "step_number": 48,
+      "piece": "C",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 49,
+      "piece": "F",
+      "direction": "LEFT",
+      "spaces": 1
+    },
+    {
+      "step_number": 50,
+      "piece": "M",
+      "direction": "DOWN",
+      "spaces": 3
+    },
+    {
+      "step_number": 51,
+      "piece": "A",
+      "direction": "RIGHT",
+      "spaces": 3
+    }
+  ]
+}

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rush Hour シミュレーター</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+    body { margin: 0; min-height: 100vh; background: #23202E; color: #e0dbd2; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 32px 16px; }
+    h1 { margin: 0 0 8px; font-size: 2rem; letter-spacing: 2px; text-align: center; color: #d4a0a0; }
+    #global-time { color: #b8aec7; font-size: 1.1rem; margin-bottom: 24px; font-weight: bold; text-align: center; }
+    #global-timer { color: #d4b896; }
+    #screen-select, #screen-game { width: 100%; display: flex; flex-direction: column; align-items: center; }
+    
+    .level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; width: 100%; max-width: 800px; }
+    .level-tile { background: #2e2a3a; border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer; color: #e0dbd2; box-shadow: 0 2px 8px rgba(0,0,0,0.25); transition: transform 0.1s, background 0.15s; border: 1.5px solid #4a4358; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+    .level-tile:hover { transform: translateY(-3px) scale(1.02); background: #3d3750; border-color: #d4a0a0; }
+    .level-tile.cleared { background: #332a33; border-color: #c4908f; }
+    .level-tile.perfect { background: #352e2a; border-color: #d4b896; }
+    
+    .level-tile .st-num { font-size: 1.4rem; font-weight: bold; }
+    .level-tile .catchphrase { font-size: 0.75rem; color: #c4908f; margin-top: 6px; min-height: 18px; opacity: 0.85; }
+    .level-tile:hover .catchphrase { color: #e0c0b0; }
+    
+    .level-tile .moves { font-size: 0.85rem; color: #d4b896; margin-top: 4px; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 12px; }
+    
+    .level-tile .clear-badge { font-size: 0.8rem; margin-top: 8px; font-weight: 900; height: 14px; }
+    .level-tile.cleared .clear-badge { color: #c4908f; }
+    .level-tile.perfect .clear-badge { color: #d4b896; }
+    
+    .level-tile .clear-meta { font-size: 0.65rem; color: #9991a8; margin-top: 4px; height: 10px; }
+    .level-tile .total-meta { font-size: 0.65rem; color: #9991a8; margin-top: 4px; height: 10px; opacity: 0.8; }
+
+    .status-bar { margin-bottom: 16px; display: flex; gap: 16px; font-size: 1rem; font-weight: bold; background: #2e2a3a; padding: 8px 16px; border-radius: 8px; flex-wrap: wrap; justify-content: center; border: 1.5px solid #4a4358; color: #e0dbd2; }
+    .status-bar span { color: #d4a0a0; }
+    .board-container { position: relative; background: #2e2a3a; padding: 16px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.35); }
+    .exit-gate { position: absolute; right: 0; background: #c4908f; border-radius: 0 6px 6px 0; display: flex; align-items: center; justify-content: center; color: #23202E; font-size: 10px; font-weight: bold; writing-mode: vertical-rl; }
+    .board { position: relative; background: #1a1824; border-radius: 8px; display: grid; gap: 3px; padding: 3px; }
+    .grid-cell { background: #33303f; border-radius: 4px; }
+    .vehicle { position: absolute; border-radius: 8px; cursor: grab; touch-action: none; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: inset 0 1px 3px rgba(255,255,255,0.15), 0 3px 5px rgba(0,0,0,0.4); transition: transform 0.05s ease; z-index: 10; }
+    .vehicle:active { cursor: grabbing; filter: brightness(1.1); z-index: 20; }
+    .vehicle::after { content: ''; position: absolute; background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+    .vehicle.h::after { width: 40%; height: 60%; }
+    .vehicle.v::after { width: 60%; height: 40%; }
+    
+    .controls { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    button { background: #4a4358; color: #e0dbd2; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 3px 5px rgba(0,0,0,0.3); }
+    button:hover { background: #5e546e; }
+    button.secondary { background: #383345; color: #b8aec7; }
+    button.secondary:hover { background: #4a4358; }
+    .message { margin-top: 14px; font-size: 1.2rem; font-weight: bold; color: #d4b896; min-height: 1.5em; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div id="screen-select">
+    <h1>Rush Hour Ultimate</h1>
+    <div id="global-time">全ステージ累計思考時間: <span id="global-timer">00:00</span></div>
+    <div class="level-grid" id="level-grid"></div>
+  </div>
+
+  <div id="screen-game" style="display: none;">
+    <h1 id="game-title">RUSH HOUR</h1>
+    <div class="status-bar">
+      <div>手数: <span id="moves">0</span></div>
+      <div>今回の記録: <span id="timer">00:00</span></div>
+      <div>累計思考時間: <span id="total-timer">00:00</span></div>
+    </div>
+
+    <div class="board-container">
+      <div class="exit-gate" id="exit-gate">出口</div>
+      <div class="board" id="board"></div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <div class="controls">
+      <button onclick="resetGame()">最初からやり直す</button>
+      <button class="secondary" onclick="showSelectScreen()">ステージ一覧に戻る</button>
+    </div>
+  </div>
+
+  <script>
+    const stages = [{"board": "BBCDDDoooCEEFFoooooHooAAooHoJJJoKKLMMNNooLooOOOPP", "moves": 3, "name": "巨大盤面 7x7", "catchphrase": "新感覚！広大な7x7の世界", "exitRow": 3}, {"board": "Y..G..Y..GOO.XXC....BCPP..BVVT..B..T", "moves": 6, "name": "初級", "catchphrase": "まずは基本から！", "exitRow": 2}, {"board": "CCC.B..DDDBEAXX.BEAF.HHKAFG..K.FGII.", "moves": 9, "name": "中級", "catchphrase": "たった1マスが遠い", "exitRow": 2}, {"board": "GHoBBBGHIKoLAAIKoLCCJDDLEEJoooooooFF", "moves": 10, "name": "初級", "catchphrase": "あみだくじ", "exitRow": 2}, {"board": "xICCLMoIoKLMAAoKLoHooDDDHoJEENxoJGGN", "moves": 12, "name": "初級", "catchphrase": "バックオーライ", "exitRow": 2}, {"board": "oHIKBBoHIKLMGoAALMGCCooNGoJDDNEEJoox", "moves": 14, "name": "初級", "catchphrase": "道を開けろ", "exitRow": 2}, {"board": "GHoBBBGHIKoLAAIKoLCCoDDLooJoEEooJoFF", "moves": 15, "name": "初級", "catchphrase": "譲り合いの精神", "exitRow": 2}, {"board": "xICCLMHIoKLMHAAKLNDDDooNooJoEExoJoGG", "moves": 18, "name": "初級", "catchphrase": "ちょっと一息", "exitRow": 2}, {"board": "O.FFF.OCCC.HDJEXXHDJEBBH.JEAIIGGGA..", "moves": 19, "name": "上級", "catchphrase": "焦りは禁物", "exitRow": 2}, {"board": "oHIBBMoHIoLMGAAKLNGCCKoNGoJDDoEEJoox", "moves": 19, "name": "初級", "catchphrase": "脳のアイドリング", "exitRow": 2}, {"board": ".DDDGBF...GBFCXXGBNCJJ..NCIEEEAAI.HH", "moves": 20, "name": "激ムズ", "catchphrase": "見えない道筋", "exitRow": 5}, {"board": "GHBBBLGHIooLAAIooLCCoDDoooJKEEooJKFF", "moves": 20, "name": "中級", "catchphrase": "一通地獄", "exitRow": 2}, {"board": "oHIBBMoHIoLMGAAoLNGoJCCNGoJKDDEEoKox", "moves": 23, "name": "中級", "catchphrase": "パズルの入り口", "exitRow": 2}, {"board": "xoCCLMHoooLMHAAoLNDDDooNoIJKEExIJKGG", "moves": 24, "name": "中級", "catchphrase": "知恵の輪", "exitRow": 2}, {"board": "GHoBBBGHIooLooIAALCCoDDLooJKEEooJKFF", "moves": 25, "name": "中級", "catchphrase": "視界不良", "exitRow": 2}, {"board": "xoCCLMHooKLMHAAKLoDDDooooIJEENxIJGGN", "moves": 28, "name": "中級", "catchphrase": "一進一退", "exitRow": 2}, {"board": "oooBBMooIoLMAAIoLNGHJCCNGHJKDDGEEKox", "moves": 29, "name": "中級", "catchphrase": "迷子の赤い車", "exitRow": 2}, {"board": "GoBBBLGoIooLooIAALooCCDDoHJKEEoHJKFF", "moves": 30, "name": "上級", "catchphrase": "ラビリンス", "exitRow": 2}, {"board": "xoCCLMooJKLMAAJKLoHDDDooHIoEENxIoGGN", "moves": 33, "name": "上級", "catchphrase": "迂回路を探せ", "exitRow": 2}, {"board": "BBooLMooIoLMooIAANGHJCCNGHJKDDGEEKox", "moves": 34, "name": "上級", "catchphrase": "車庫入れの達人", "exitRow": 2}, {"board": "oooBBBooIooLooIAALCCoDDLGHJKEEGHJKFF", "moves": 35, "name": "上級", "catchphrase": "右折待ち", "exitRow": 2}, {"board": "xooCCMooJKLMAAJKLNHDDDLNHIooEExIooGG", "moves": 38, "name": "上級", "catchphrase": "通勤ラッシュ開始", "exitRow": 2}, {"board": "GBBoLMGHIoLMGHIAANoooCCNooJKDDEEJKox", "moves": 39, "name": "上級", "catchphrase": "スリップ注意", "exitRow": 2}, {"board": "BBBKLMHCCKLMH.AALMDDJ....IJEE..IFFGG", "moves": 49, "name": "レジェンド級", "catchphrase": "一歩進んで二歩下がる", "exitRow": 2}, {"board": "BBIooMGHIoLMGHAALNGCCKoNooJKDDooJEEx", "moves": 50, "name": "最高難易度", "catchphrase": "抜け出せるか！？", "exitRow": 2}, {"board": "ooIBBBooIKooAAJKoLCCJDDLGHEEoLGHFFoo", "moves": 50, "name": "最高難易度", "catchphrase": "手詰まりからの逆転", "exitRow": 2}, {"board": "ooooxoCCCJLoAAIJLMooIDDMHEEKooHFFKox", "moves": 50, "name": "最高難易度", "catchphrase": "ひらめきが鍵", "exitRow": 2}, {"board": "ooooLxCCCJLoAAIJoMooIDDMHEEKooHFFKox", "moves": 50, "name": "最高難易度", "catchphrase": "パズルの深淵", "exitRow": 2}, {"board": "ooooLxCCCJLoAAIJoMooIDDMHEEKooHFFKGG", "moves": 50, "name": "最高難易度", "catchphrase": "神業スライド", "exitRow": 2}, {"board": "ooooxoCCCJLoAAIJLMooIDDMHEEKooHFFKGG", "moves": 50, "name": "最高難易度", "catchphrase": "論理の迷宮", "exitRow": 2}, {"board": "ooxCCLDDoKoLIAAKooIoJKEEFFJooMGGGHHM", "moves": 50, "name": "最高難易度", "catchphrase": "絡まった糸を解く快感", "exitRow": 2}, {"board": "BBBJCCHooJoKHAAJoKooIDDLEEIooLooxoGG", "moves": 50, "name": "最高難易度", "catchphrase": "空間把握テスト", "exitRow": 2}, {"board": "ooIBBBooIKxoAAJKoLCCJDDLGHEEoLGHFFoo", "moves": 50, "name": "最高難易度", "catchphrase": "知恵の輪の如し", "exitRow": 2}, {"board": "BBBJCCHxoJoKHAAJoKooIDDLEEIooLooxoGG", "moves": 50, "name": "最高難易度", "catchphrase": "永遠に続くスライド", "exitRow": 2}, {"board": "BBBJCCHooJxKHAAJoKooIDDLEEIooLooxoGG", "moves": 50, "name": "最高難易度", "catchphrase": "直感より論理", "exitRow": 2}, {"board": "BBBJCCHooJoKHAAJoKooIDDLEEIooLoxxoGG", "moves": 50, "name": "最高難易度", "catchphrase": "思考の泥沼", "exitRow": 2}, {"board": "xCCoLMooJoLMAAJoLNHIDDDNHIoKEExooKGG", "moves": 51, "name": "最高難易度", "catchphrase": "渋滞の極み", "exitRow": 2}, {"board": "GBBoLoGHIoLMGHIAAMCCCKoMooJKDDEEJFFo", "moves": 51, "name": "最高難易度", "catchphrase": "一筋縄ではいかない", "exitRow": 2}, {"board": "oxCCMNDDDKMNAAJKooooJEEoIFFLooIGGLox", "moves": 52, "name": "最高難易度", "catchphrase": "無限ループの錯覚", "exitRow": 2}, {"board": "oxCCMNDDDKMNAAJKooooJLEEIFFLooIGGHHo", "moves": 52, "name": "最高難易度", "catchphrase": "パズルマスターへの道", "exitRow": 2}, {"board": "BBBCCNDDoxMNJAAoMOJoKFFOGGKLooxIILoo", "moves": 53, "name": "最高難易度", "catchphrase": "脱出率1%！？", "exitRow": 2}, {"board": "ooBBoxDDDKooAAJKoMooJEEMIFFLooIGGLHH", "moves": 53, "name": "最高難易度", "catchphrase": "脳のストレッチ", "exitRow": 2}, {"board": "ooBBoxDDDKooAAJKoMooJEEMIFFLooIGGLox", "moves": 53, "name": "最高難易度", "catchphrase": "迷宮からの脱出", "exitRow": 2}, {"board": "oxCCMoDDDKMoAAJKooooJLEEIFFLoNIGGoxN", "moves": 54, "name": "最高難易度", "catchphrase": "脳汁ブシャー！", "exitRow": 2}, {"board": "oooJLxCCCJLoHAAKooHoIKDDooIEEMoFFoxM", "moves": 54, "name": "最高難易度", "catchphrase": "最後の1ピース", "exitRow": 2}, {"board": "oooJxoCCCJLoHAAKLoHoIKDDooIEEMoFFoxM", "moves": 54, "name": "最高難易度", "catchphrase": "空間の魔術師", "exitRow": 2}, {"board": "BBBKCCDDoKoLIAAKoLIoJEEMFFJooMooxoHH", "moves": 54, "name": "最高難易度", "catchphrase": "渋滞の予兆", "exitRow": 2}, {"board": "ooBBMxDDDKMoAAJKoNooJEENIFFLooIGGLox", "moves": 55, "name": "最高難易度", "catchphrase": "出口はどこだ？", "exitRow": 2}, {"board": "ooBBMxDDDKMoAAJKoNooJEENIFFLooIGGLHH", "moves": 55, "name": "最高難易度", "catchphrase": "絡み合う車たち", "exitRow": 2}, {"board": "BBoKMxDDDKMoIAALooIoJLEEooJFFNoGGoxN", "moves": 58, "name": "最高難易度", "catchphrase": "視界がパッと開ける瞬間", "exitRow": 2}, {"board": "IBBxooIooLDDJAALooJoKEEMFFKooMGGHHHM", "moves": 60, "name": "最高難易度", "catchphrase": "絶望の60手詰め！", "exitRow": 2}];
+    
+    let moveCount = 0;
+    let isWon = false;
+    let currentStageIndex = 0;
+    let vehicles = [];
+    let boardSize = 6;
+    let cellSize = 340 / boardSize;
+
+    
+    let timerInterval = null;
+    let currentAttemptTime = 0;
+    let currentStageTotalTime = 0;
+    
+
+    const screenSelect = document.getElementById('screen-select');
+    const screenGame = document.getElementById('screen-game');
+    const levelGrid = document.getElementById('level-grid');
+    const boardEl = document.getElementById('board');
+    const exitGateEl = document.getElementById('exit-gate');
+    const moveCountEl = document.getElementById('moves');
+    const timerEl = document.getElementById('timer');
+    const messageEl = document.getElementById('message');
+    const gameTitle = document.getElementById('game-title');
+    const globalTimerEl = document.getElementById('global-timer');
+    const totalTimerEl = document.getElementById('total-timer');
+
+    // Load cleared status and total times
+    let clearedStages = JSON.parse(localStorage.getItem('rushhour_cleared_v2') || '{}');
+    let stageTotalTimes = JSON.parse(localStorage.getItem('rushhour_stage_total_times') || '{}');
+
+    // Migration v3 for re-indexed stages
+    if (!localStorage.getItem('rushhour_migration_v3')) {
+        const mapping = {"0": "1", "1": "2", "2": "8", "3": "10", "4": "23", "5": "24", "6": "25", "7": "26", "8": "27", "9": "28", "10": "29", "11": "30", "12": "31", "13": "32", "14": "33", "15": "34", "16": "35", "17": "36", "18": "37", "19": "38", "20": "39", "21": "40", "22": "41", "23": "42", "24": "43", "25": "44", "26": "45", "27": "47", "28": "48", "29": "49", "30": "50", "31": "0"};
+        
+        const newCleared = {};
+        for (let k in clearedStages) {
+            if (mapping[k]) newCleared[mapping[k]] = clearedStages[k];
+        }
+        clearedStages = newCleared;
+        
+        const newTotal = {};
+        for (let k in stageTotalTimes) {
+            if (mapping[k]) newTotal[mapping[k]] = stageTotalTimes[k];
+        }
+        stageTotalTimes = newTotal;
+        
+        localStorage.setItem('rushhour_cleared_v2', JSON.stringify(clearedStages));
+        localStorage.setItem('rushhour_stage_total_times', JSON.stringify(stageTotalTimes));
+        localStorage.setItem('rushhour_migration_v3', 'true');
+    }
+
+    // Migration v4 for cleaning up corrupt indices
+    if (!localStorage.getItem('rushhour_migration_v4')) {
+        if (clearedStages['32'] && clearedStages['32'].time === '00:01') {
+            delete clearedStages['32'];
+            delete stageTotalTimes['32'];
+        }
+        if (clearedStages['33'] && clearedStages['33'].time === '00:01') {
+            delete clearedStages['33'];
+            delete stageTotalTimes['33'];
+        }
+        localStorage.setItem('rushhour_cleared_v2', JSON.stringify(clearedStages));
+        localStorage.setItem('rushhour_stage_total_times', JSON.stringify(stageTotalTimes));
+        localStorage.setItem('rushhour_migration_v4', 'true');
+    }
+
+
+
+    // Async function to load from server
+    
+    async function syncTimes() {
+        try {
+            await fetch('/api/times', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(stageTotalTimes)
+            });
+        } catch(e) {}
+    }
+
+    async function syncLoad() {
+      try {
+        const [res, timeRes] = await Promise.all([
+            fetch('/api/save'),
+            fetch('/api/times')
+        ]);
+        const serverData = await res.json();
+        const serverTimes = await timeRes.json();
+        
+        let updated = false;
+        
+        // Merge cleared stages (bidirectional)
+        for (let k in serverData) {
+          if (!clearedStages[k] || (serverData[k].perfect && !clearedStages[k].perfect)) {
+            clearedStages[k] = serverData[k];
+            updated = true;
+          }
+        }
+        
+        // Push local clears to server
+        const toPush = {};
+        for (let k in clearedStages) {
+          if (!serverData[k]) {
+            toPush[k] = clearedStages[k];
+          }
+        }
+        if (Object.keys(toPush).length > 0) {
+          await fetch('/api/save', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(toPush)
+          });
+        }
+        
+        // Merge times: ADDITIVE sync
+        // The server stores the "last known" time per stage.
+        // On load, we compute: local_delta = local - server (time added since last sync)
+        // Then new_total = server + local_delta = local (if local > server)
+        // But if server > local, someone else added time, so: new_total = server + 0 = server
+        // To make it truly additive across devices:
+        //   server stores the "ground truth" total.
+        //   On load: local gets server value (the bigger one wins).
+        //   On save: local pushes its current value (which includes playtime since load).
+        // This way: Device A plays 30s -> pushes 30. Device B loads 30, plays 20 -> has 50 -> pushes 50.
+        
+        let timeUpdated = false;
+        for (let k in serverTimes) {
+          if (!stageTotalTimes[k] || serverTimes[k] > stageTotalTimes[k]) {
+            stageTotalTimes[k] = serverTimes[k];
+            timeUpdated = true;
+          }
+        }
+        
+        // Push any local times the server doesn't have
+        const toPushTimes = {};
+        for (let k in stageTotalTimes) {
+          if (!serverTimes[k] || stageTotalTimes[k] > serverTimes[k]) {
+            toPushTimes[k] = stageTotalTimes[k];
+          }
+        }
+        if (Object.keys(toPushTimes).length > 0) {
+          await fetch('/api/times', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(toPushTimes)
+          });
+        }
+        
+        if (updated) {
+          localStorage.setItem('rushhour_cleared_v2', JSON.stringify(clearedStages));
+        }
+        if (timeUpdated) {
+          localStorage.setItem('rushhour_stage_total_times', JSON.stringify(stageTotalTimes));
+        }
+        if ((updated || timeUpdated) && screenSelect.style.display !== 'none') {
+          renderLevelGrid();
+        }
+      } catch (e) {
+        console.log('API sync failed, playing offline mode', e);
+      }
+    }
+
+
+
+    function formatTime(sec) {
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
+      const s = (sec % 60).toString().padStart(2, '0');
+      return h > 0 ? h + ':' + m + ':' + s : m + ':' + s;
+    }
+
+    function renderLevelGrid() {
+      levelGrid.innerHTML = '';
+      let globalTotal = 0;
+      for (let k in stageTotalTimes) {
+         globalTotal += (stageTotalTimes[k] || 0);
+      }
+      if (globalTimerEl) globalTimerEl.textContent = formatTime(globalTotal);
+      
+      stages.forEach((stage, idx) => {
+        const status = clearedStages[idx];
+        const isCleared = !!status;
+        const isPerfect = status && status.perfect;
+        
+        const tile = document.createElement('div');
+        let classes = 'level-tile';
+        if (isPerfect) classes += ' perfect';
+        else if (isCleared) classes += ' cleared';
+        tile.className = classes;
+        tile.onclick = () => launchStage(idx);
+        
+        const stNum = document.createElement('div');
+        stNum.className = 'st-num';
+        stNum.textContent = 'STAGE ' + (idx + 1);
+        
+        const catchphrase = document.createElement('div');
+        catchphrase.className = 'catchphrase';
+        catchphrase.textContent = stage.catchphrase || '';
+        
+        const moves = document.createElement('div');
+        moves.className = 'moves';
+        moves.textContent = stage.moves + '手';
+        
+        const badge = document.createElement('div');
+        badge.className = 'clear-badge';
+        if (isPerfect) badge.textContent = '★ PERFECT';
+        else if (isCleared) badge.textContent = '✔ CLEAR';
+
+        const meta = document.createElement('div');
+        meta.className = 'clear-meta';
+        if (isCleared && status.date) {
+          meta.textContent = status.time + ' (' + status.date + ')';
+        }
+
+        const tmeta = document.createElement('div');
+        tmeta.className = 'total-meta';
+        const tot = stageTotalTimes[idx] || 0;
+        if (tot > 0) tmeta.textContent = '累計: ' + formatTime(tot);
+
+        tile.appendChild(stNum);
+        tile.appendChild(catchphrase);
+        tile.appendChild(moves);
+        tile.appendChild(badge);
+        tile.appendChild(meta);
+        tile.appendChild(tmeta);
+        levelGrid.appendChild(tile);
+      });
+    }
+
+    function showSelectScreen() {
+      syncTimes();
+      clearInterval(timerInterval);
+      timerInterval = null;
+      screenGame.style.display = 'none';
+      screenSelect.style.display = 'flex';
+      renderLevelGrid();
+    }
+
+    function launchStage(idx) {
+      currentStageIndex = idx;
+      screenSelect.style.display = 'none';
+      screenGame.style.display = 'flex';
+      gameTitle.textContent = 'ステージ ' + (idx + 1) + ' (' + stages[idx].moves + '手)';
+      
+      const st = stages[idx];
+      boardSize = Math.sqrt(st.board.length);
+      cellSize = 340 / boardSize;
+      
+      boardEl.style.width = '340px';
+      boardEl.style.height = '340px';
+      boardEl.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`;
+      boardEl.style.gridTemplateRows = `repeat(${boardSize}, 1fr)`;
+      
+      // Determine exit row
+      let exitRow = st.exitRow !== undefined ? st.exitRow : Math.floor(boardSize / 2) - 1;
+      
+      exitGateEl.style.top = `calc(16px + ${exitRow} * ${cellSize}px)`;
+      exitGateEl.style.height = `${cellSize}px`;
+      exitGateEl.style.width = '16px';
+      
+      initGame();
+    }
+
+    function createGridCells() {
+      boardEl.innerHTML = '';
+      for (let i = 0; i < boardSize * boardSize; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        boardEl.appendChild(cell);
+      }
+    }
+
+    function parseGrid(gridString) {
+      const cars = {};
+      const walls = [];
+      for (let i = 0; i < gridString.length; i++) {
+        const c = gridString[i];
+        if (c === 'x') {
+          walls.push(i);
+        } else if (c !== '.' && c !== 'o') {
+          if (!cars[c]) cars[c] = { positions: [] };
+          cars[c].positions.push(i);
+        }
+      }
+
+      const parsedVehicles = [];
+      const colors = ['#b8976a', '#8aab7a', '#c48a5a', '#6a9ea8', '#b89a5a', '#b87a90', '#9a7ab8', '#6aab8a', '#6a8ab8', '#c49a6a', '#8a6ab8', '#b86a8a', '#b87a5a', '#7a9a5a', '#5a8ab8', '#5aaa9a', '#b86a7a'];
+      let colorIndex = 0;
+
+      // Find true target char
+      let targetChar = 'A';
+      if (gridString.indexOf('X') !== -1 && gridString.indexOf('A') !== -1) {
+         const xPos = cars['X'] ? cars['X'].positions : [];
+         const aPos = cars['A'] ? cars['A'].positions : [];
+         if (xPos.length === 2 && xPos[1] - xPos[0] === 1) targetChar = 'X';
+         else targetChar = 'A';
+      } else if (gridString.indexOf('X') !== -1) {
+         targetChar = 'X';
+      }
+      
+      for (const c in cars) {
+        const pos = cars[c].positions;
+        const isTarget = (c === targetChar);
+        const length = pos.length;
+        const isH = length > 1 ? (pos[1] - pos[0] === 1) : true;
+        
+        parsedVehicles.push({
+          id: c,
+          color: isTarget ? '#c4908f' : colors[colorIndex++ % colors.length],
+          length: length,
+          orientation: isH ? 'h' : 'v',
+          row: Math.floor(pos[0] / boardSize),
+          col: pos[0] % boardSize,
+          isTarget: isTarget,
+          isWall: false
+        });
+      }
+      
+      walls.forEach((pos, idx) => {
+        parsedVehicles.push({
+          id: 'wall_' + idx,
+          color: '#475569',
+          length: 1,
+          orientation: 'h',
+          row: Math.floor(pos / boardSize),
+          col: pos % boardSize,
+          isTarget: false,
+          isWall: true
+        });
+      });
+      return parsedVehicles;
+    }
+
+    function initGame() {
+      createGridCells();
+      vehicles = parseGrid(stages[currentStageIndex].board);
+      moveCount = 0;
+      isWon = false;
+      moveCountEl.textContent = moveCount;
+      messageEl.textContent = '';
+      
+      clearInterval(timerInterval);
+      timerInterval = null;
+      currentAttemptTime = 0;
+      currentStageTotalTime = stageTotalTimes[currentStageIndex] || 0;
+      timerEl.textContent = formatTime(currentAttemptTime);
+      totalTimerEl.textContent = formatTime(currentStageTotalTime);
+      
+      renderVehicles();
+    }
+
+    function renderVehicles() {
+      document.querySelectorAll('.vehicle').forEach(e => e.remove());
+
+      vehicles.forEach(v => {
+        const el = document.createElement('div');
+        el.className = 'vehicle ' + v.orientation;
+        el.id = v.id;
+        el.style.backgroundColor = v.color;
+        
+        if (v.isWall) {
+          el.style.borderRadius = '2px';
+          el.style.border = '2px solid #1e293b';
+          el.style.boxShadow = 'none';
+          el.className = 'vehicle';
+        }
+
+        const pad = 4;
+        if (v.orientation === 'h' || v.isWall) {
+          el.style.width = (v.length * cellSize - pad * 2) + 'px';
+          el.style.height = (cellSize - pad * 2) + 'px';
+        } else {
+          el.style.width = (cellSize - pad * 2) + 'px';
+          el.style.height = (v.length * cellSize - pad * 2) + 'px';
+        }
+        el.style.left = (v.col * cellSize + pad) + 'px';
+        el.style.top = (v.row * cellSize + pad) + 'px';
+
+        setupDrag(el, v);
+        boardEl.appendChild(el);
+      });
+    }
+
+    function getGrid(excludeVehicleId) {
+      const grid = Array(boardSize).fill(null).map(() => Array(boardSize).fill(false));
+      vehicles.forEach(v => {
+        if (v.id === excludeVehicleId) return;
+        for (let i = 0; i < v.length; i++) {
+          const r = v.orientation === 'v' ? v.row + i : v.row;
+          const c = v.orientation === 'h' ? v.col + i : v.col;
+          if (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
+            grid[r][c] = true;
+          }
+        }
+      });
+      return grid;
+    }
+
+    function setupDrag(element, vehicle) {
+      let startX, startY, minOffset, maxOffset;
+
+      const onPointerDown = (e) => {
+        if (isWon || vehicle.isWall) return;
+        
+        if (!timerInterval) {
+          timerInterval = setInterval(() => {
+            currentAttemptTime++;
+            currentStageTotalTime++;
+            if (timerEl) timerEl.textContent = formatTime(currentAttemptTime);
+            if (totalTimerEl) totalTimerEl.textContent = formatTime(currentStageTotalTime);
+            
+            stageTotalTimes[currentStageIndex] = currentStageTotalTime;
+            localStorage.setItem('rushhour_stage_total_times', JSON.stringify(stageTotalTimes));
+          }, 1000);
+        }
+
+        element.setPointerCapture(e.pointerId);
+        startX = e.clientX;
+        startY = e.clientY;
+        const grid = getGrid(vehicle.id);
+
+        if (vehicle.orientation === 'h') {
+          let min = vehicle.col;
+          while (min > 0 && !grid[vehicle.row][min - 1]) min--;
+          let max = vehicle.col;
+          const limit = vehicle.isTarget ? boardSize - vehicle.length + 1 : boardSize - vehicle.length;
+          while (max < limit) {
+            if (max + vehicle.length < boardSize && !grid[vehicle.row][max + vehicle.length]) max++;
+            else if (vehicle.isTarget && max + vehicle.length === boardSize) { max++; break; }
+            else break;
+          }
+          minOffset = (min - vehicle.col) * cellSize;
+          maxOffset = (max - vehicle.col) * cellSize;
+        } else {
+          let min = vehicle.row;
+          while (min > 0 && !grid[min - 1][vehicle.col]) min--;
+          let max = vehicle.row;
+          while (max + vehicle.length < boardSize && !grid[max + vehicle.length][vehicle.col]) max++;
+          minOffset = (min - vehicle.row) * cellSize;
+          maxOffset = (max - vehicle.row) * cellSize;
+        }
+
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+      };
+
+      const onPointerMove = (e) => {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (vehicle.orientation === 'h') {
+          element.style.transform = 'translateX(' + Math.max(minOffset, Math.min(maxOffset, dx)) + 'px)';
+        } else {
+          element.style.transform = 'translateY(' + Math.max(minOffset, Math.min(maxOffset, dy)) + 'px)';
+        }
+      };
+
+      const onPointerUp = (e) => {
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        let deltaUnits = 0;
+
+        if (vehicle.orientation === 'h') {
+          deltaUnits = Math.round(Math.max(minOffset, Math.min(maxOffset, dx)) / cellSize);
+          vehicle.col += deltaUnits;
+        } else {
+          deltaUnits = Math.round(Math.max(minOffset, Math.min(maxOffset, dy)) / cellSize);
+          vehicle.row += deltaUnits;
+        }
+
+        element.style.transform = '';
+        if (deltaUnits !== 0) {
+          moveCount++;
+          moveCountEl.textContent = moveCount;
+        }
+        renderVehicles();
+
+        if (vehicle.isTarget && vehicle.col >= boardSize - 2) {
+          isWon = true;
+          clearInterval(timerInterval);
+          timerInterval = null;
+          
+          const minMoves = stages[currentStageIndex].moves;
+          const isPerfect = (moveCount <= minMoves);
+          
+          if (isPerfect) messageEl.textContent = '🎉 PERFECT! 最短手数でクリアしました！';
+          else messageEl.textContent = '🎉 クリア！おめでとうございます！';
+          
+          const prev = clearedStages[currentStageIndex];
+          const now = new Date();
+          const dStr = (now.getMonth()+1) + '/' + now.getDate() + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+          const tStr = formatTime(currentAttemptTime);
+          
+          if (!prev || !prev.perfect || isPerfect) {
+            clearedStages[currentStageIndex] = { perfect: (prev && prev.perfect) || isPerfect, date: dStr, time: tStr };
+            if (isPerfect) clearedStages[currentStageIndex].perfect = true; 
+            localStorage.setItem('rushhour_cleared_v2', JSON.stringify(clearedStages));
+            
+            syncTimes();
+            fetch('/api/save', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ [currentStageIndex]: clearedStages[currentStageIndex] })
+            }).catch(e => console.log('Save sync error', e));
+          }
+        }
+      };
+      element.addEventListener('pointerdown', onPointerDown);
+    }
+
+    function resetGame() {
+      initGame();
+    }
+
+    // 初期起動
+    renderLevelGrid();
+    syncLoad();
+  </script>
+</body>
+</html>

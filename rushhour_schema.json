@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "difficulty_level": {
+      "type": "string",
+      "description": "パズルの難易度評価（例: 51-moves-hardest）"
+    },
+    "total_moves": {
+      "type": "integer",
+      "description": "脱出までに必要な最短手数（51手になるはずである）"
+    },
+    "solution_steps": {
+      "type": "array",
+      "description": "ターゲット車両（A）が脱出するまでの具体的な手順リスト",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step_number": {
+            "type": "integer",
+            "description": "何手目の操作か"
+          },
+          "piece": {
+            "type": "string",
+            "description": "動かす車両のID (A, B, C, G, Mなど)"
+          },
+          "direction": {
+            "type": "string",
+            "description": "移動方向 (UP, DOWN, LEFT, RIGHT)"
+          },
+          "spaces": {
+            "type": "integer",
+            "description": "移動するマス目数"
+          }
+        },
+        "required": ["step_number", "piece", "direction", "spaces"]
+      }
+    }
+  },
+  "required": ["difficulty_level", "total_moves", "solution_steps"]
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><title>RushHour World Bridge</title></head>
+<body>
+<script>
+(function () {
+  var allowedOrigins = [
+    'http://100.117.158.25:7000',
+    'http://localhost:7000',
+    'http://127.0.0.1:7000'
+  ];
+  var refOrigin = '';
+  try {
+    if (document.referrer) {
+      refOrigin = new URL(document.referrer).origin;
+    }
+  } catch (e) {}
+  var targetOrigin = allowedOrigins.indexOf(refOrigin) !== -1 ? refOrigin : 'http://100.117.158.25:7000';
+
+  try {
+    var rawCleared = localStorage.getItem('rushhour_cleared_v2');
+    var rawTimes = localStorage.getItem('rushhour_stage_total_times');
+    var clearedObj = rawCleared ? JSON.parse(rawCleared) : {};
+    var timesObj = rawTimes ? JSON.parse(rawTimes) : {};
+
+    var clearedCount = 0;
+    if (clearedObj && typeof clearedObj === 'object') {
+      Object.keys(clearedObj).forEach(function (k) {
+        if (clearedObj[k]) clearedCount++;
+      });
+    }
+
+    var totalTimeSec = 0;
+    if (timesObj && typeof timesObj === 'object') {
+      Object.keys(timesObj).forEach(function (k) {
+        var v = Number(timesObj[k] || 0);
+        if (v > 0) totalTimeSec += v;
+      });
+    }
+
+    window.parent.postMessage({
+      type: 'kei7s-world-bridge',
+      appId: 'rush-hour',
+      hasData: Boolean((rawCleared && clearedCount > 0) || (rawTimes && totalTimeSec > 0)),
+      summary: {
+        clearedCount: clearedCount,
+        totalTimeSec: Math.round(totalTimeSec)
+      }
+    }, targetOrigin);
+  } catch (err) {
+    window.parent.postMessage({
+      type: 'kei7s-world-bridge',
+      appId: 'rush-hour',
+      hasData: false,
+      error: String(err)
+    }, targetOrigin);
+  }
+})();
+</script>
+</body>
+</html>

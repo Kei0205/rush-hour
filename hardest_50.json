@@ -1,0 +1,202 @@
+[
+  {
+    "moves": 60,
+    "board": "IBBxooIooLDDJAALooJoKEEMFFKooMGGHHHM"
+  },
+  {
+    "moves": 58,
+    "board": "BBoKMxDDDKMoIAALooIoJLEEooJFFNoGGoxN"
+  },
+  {
+    "moves": 55,
+    "board": "ooBBMxDDDKMoAAJKoNooJEENIFFLooIGGLox"
+  },
+  {
+    "moves": 55,
+    "board": "ooBBMxDDDKMoAAJKoNooJEENIFFLooIGGLHH"
+  },
+  {
+    "moves": 54,
+    "board": "oxCCMoDDDKMoAAJKooooJLEEIFFLoNIGGoxN"
+  },
+  {
+    "moves": 54,
+    "board": "oooJLxCCCJLoHAAKooHoIKDDooIEEMoFFoxM"
+  },
+  {
+    "moves": 54,
+    "board": "oooJxoCCCJLoHAAKLoHoIKDDooIEEMoFFoxM"
+  },
+  {
+    "moves": 54,
+    "board": "BBBKCCDDoKoLIAAKoLIoJEEMFFJooMooxoHH"
+  },
+  {
+    "moves": 53,
+    "board": "BBBCCNDDoxMNJAAoMOJoKFFOGGKLooxIILoo"
+  },
+  {
+    "moves": 53,
+    "board": "ooBBoxDDDKooAAJKoMooJEEMIFFLooIGGLHH"
+  },
+  {
+    "moves": 53,
+    "board": "ooBBoxDDDKooAAJKoMooJEEMIFFLooIGGLox"
+  },
+  {
+    "moves": 52,
+    "board": "oxCCMNDDDKMNAAJKooooJEEoIFFLooIGGLox"
+  },
+  {
+    "moves": 52,
+    "board": "oxCCMNDDDKMNAAJKooooJLEEIFFLooIGGHHo"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMooJoLMAAJoLNHIDDDNHIoKEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "GBBoLoGHIoLMGHIAAMCCCKoMooJKDDEEJFFo"
+  },
+  {
+    "moves": 50,
+    "board": "BBIooMGHIoLMGHAALNGCCKoNooJKDDooJEEx"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKooAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooooxoCCCJLoAAIJLMooIDDMHEEKooHFFKox"
+  },
+  {
+    "moves": 50,
+    "board": "ooooLxCCCJLoAAIJoMooIDDMHEEKooHFFKox"
+  },
+  {
+    "moves": 50,
+    "board": "ooooLxCCCJLoAAIJoMooIDDMHEEKooHFFKGG"
+  },
+  {
+    "moves": 50,
+    "board": "ooooxoCCCJLoAAIJLMooIDDMHEEKooHFFKGG"
+  },
+  {
+    "moves": 50,
+    "board": "ooxCCLDDoKoLIAAKooIoJKEEFFJooMGGGHHM"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKooIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 51,
+    "board": "GBBxLoGHIoLMGHIAAMCCCKoMooJKDDEEJFFo"
+  },
+  {
+    "moves": 51,
+    "board": "GBBoLoGHIoLMGHIAAMCCCKoMooJKDDEEJFFx"
+  },
+  {
+    "moves": 50,
+    "board": "xoIBBBooIKooAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "oxIBBBooIKooAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBxoIKooAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBoxIKooAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKxoAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKoxAAJKoLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKooAAJKxLCCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKooAAJKoLxCJDDLGHEEoLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "ooIBBBooIKooAAJKoLCCJDDLGHEExLGHFFoo"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHxoJoKHAAJoKooIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHoxJoKHAAJoKooIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJxKHAAJoKooIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJxKooIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKxoIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKoxIDDLEEIooLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKooIDDLEEIxoLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKooIDDLEEIoxLooxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKooIDDLEEIooLxoxoGG"
+  },
+  {
+    "moves": 50,
+    "board": "BBBJCCHooJoKHAAJoKooIDDLEEIooLoxxoGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCxLMooJoLMAAJoLNHIDDDNHIoKEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMxoJoLMAAJoLNHIDDDNHIoKEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMoxJoLMAAJoLNHIDDDNHIoKEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMooJxLMAAJoLNHIDDDNHIoKEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMooJoLMAAJoLNHIDDDNHIoxEExooKGG"
+  },
+  {
+    "moves": 51,
+    "board": "xCCoLMooJoLMAAJoLNHIDDDNHIoKEExxoKGG"
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "board": "Y..G..Y..GOO.XXC....BCPP..BVVT..B..T",
+    "moves": 6,
+    "name": "初級",
+    "catchphrase": "まずは基本から！",
+    "exitRow": 2
+  },
+  {
+    "board": "CCC.B..DDDBEAXX.BEAF.HHKAFG..K.FGII.",
+    "moves": 9,
+    "name": "中級",
+    "catchphrase": "たった1マスが遠い",
+    "exitRow": 2
+  },
+  {
+    "board": "O.FFF.OCCC.HDJEXXHDJEBBH.JEAIIGGGA..",
+    "moves": 19,
+    "name": "上級",
+    "catchphrase": "焦りは禁物",
+    "exitRow": 2
+  },
+  {
+    "board": ".DDDGBF...GBFCXXGBNCJJ..NCIEEEAAI.HH",
+    "moves": 20,
+    "name": "激ムズ",
+    "catchphrase": "見えない道筋",
+    "exitRow": 5
+  },
+  {
+    "board": "BBBKLMHCCKLMH.AALMDDJ....IJEE..IFFGG",
+    "moves": 49,
+    "name": "レジェンド級",
+    "catchphrase": "一歩進んで二歩下がる",
+    "exitRow": 2
+  },
+  {
+    "board": "BBCDDDoooCEEFFoooooHooAAooHoJJJoKKLMMNNooLooOOOPP",
+    "moves": 3,
+    "name": "巨大盤面 7x7",
+    "catchphrase": "新感覚！広大な7x7の世界",
+    "exitRow": 3
+  },
+  {
+    "board": "AAoOooPooOooPooBCCoooBoooooDDDoooooo",
+    "moves": 4,
+    "name": "追加",
+    "catchphrase": "手数: 4",
+    "exitRow": 0
+  },
+  {
+    "board": "oAAoooooooooooBCCoooBoooooooooDDDooo",
+    "moves": 1,
+    "name": "追加",
+    "catchphrase": "手数: 1",
+    "exitRow": 0
+  },
+  {
+    "board": "oBBBoooPoooooPoAAooPoCCooooooooDDDoo",
+    "moves": 1,
+    "name": "追加",
+    "catchphrase": "手数: 1",
+    "exitRow": 2
+  },
+  {
+    "board": "oooBoooooBoooAAoCDoEooCDoEooFFoEooGG",
+    "moves": 3,
+    "name": "追加",
+    "catchphrase": "手数: 3",
+    "exitRow": 2
+  },
+  {
+    "board": "oBBooooooooooAAooooCoDoooCoDooEEEDoo",
+    "moves": 1,
+    "name": "追加",
+    "catchphrase": "手数: 1",
+    "exitRow": 2
+  },
+  {
+    "board": "BBooooPoooooPoAAooPooCoooooCoooDDDoo",
+    "moves": 1,
+    "name": "追加",
+    "catchphrase": "手数: 1",
+    "exitRow": 2
+  },
+  {
+    "board": "oBBBoooooCoooAAoCooDoEoooDoEooFFoEoo",
+    "moves": 2,
+    "name": "追加",
+    "catchphrase": "手数: 2",
+    "exitRow": 2
+  },
+  {
+    "board": "oBBoCooDooCooDAAoooEooooooEooFFoooGG",
+    "moves": 1,
+    "name": "追加",
+    "catchphrase": "手数: 1",
+    "exitRow": 2
+  }
+]

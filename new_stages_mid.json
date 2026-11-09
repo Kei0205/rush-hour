@@ -1,0 +1,128 @@
+[
+  {
+    "board": "oooBBBooIooLooIAALCCoDDLGHJKEEGHJKFF",
+    "moves": 35,
+    "name": "中級～上級",
+    "catchphrase": "手数 35 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GoBBBLGoIooLooIAALooCCDDoHJKEEoHJKFF",
+    "moves": 30,
+    "name": "中級～上級",
+    "catchphrase": "手数 30 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GHoBBBGHIooLooIAALCCoDDLooJKEEooJKFF",
+    "moves": 25,
+    "name": "中級～上級",
+    "catchphrase": "手数 25 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GHBBBLGHIooLAAIooLCCoDDoooJKEEooJKFF",
+    "moves": 20,
+    "name": "中級～上級",
+    "catchphrase": "手数 20 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GHoBBBGHIKoLAAIKoLCCoDDLooJoEEooJoFF",
+    "moves": 15,
+    "name": "中級～上級",
+    "catchphrase": "手数 15 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GHoBBBGHIKoLAAIKoLCCJDDLEEJoooooooFF",
+    "moves": 10,
+    "name": "中級～上級",
+    "catchphrase": "手数 10 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xooCCMooJKLMAAJKLNHDDDLNHIooEExIooGG",
+    "moves": 38,
+    "name": "中級～上級",
+    "catchphrase": "手数 38 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xoCCLMooJKLMAAJKLoHDDDooHIoEENxIoGGN",
+    "moves": 33,
+    "name": "中級～上級",
+    "catchphrase": "手数 33 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xoCCLMHooKLMHAAKLoDDDooooIJEENxIJGGN",
+    "moves": 28,
+    "name": "中級～上級",
+    "catchphrase": "手数 28 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xoCCLMHoooLMHAAoLNDDDooNoIJKEExIJKGG",
+    "moves": 24,
+    "name": "中級～上級",
+    "catchphrase": "手数 24 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xICCLMHIoKLMHAAKLNDDDooNooJoEExoJoGG",
+    "moves": 18,
+    "name": "中級～上級",
+    "catchphrase": "手数 18 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "xICCLMoIoKLMAAoKLoHooDDDHoJEENxoJGGN",
+    "moves": 12,
+    "name": "中級～上級",
+    "catchphrase": "手数 12 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "GBBoLMGHIoLMGHIAANoooCCNooJKDDEEJKox",
+    "moves": 39,
+    "name": "中級～上級",
+    "catchphrase": "手数 39 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "BBooLMooIoLMooIAANGHJCCNGHJKDDGEEKox",
+    "moves": 34,
+    "name": "中級～上級",
+    "catchphrase": "手数 34 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "oooBBMooIoLMAAIoLNGHJCCNGHJKDDGEEKox",
+    "moves": 29,
+    "name": "中級～上級",
+    "catchphrase": "手数 29 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "oHIBBMoHIoLMGAAoLNGoJCCNGoJKDDEEoKox",
+    "moves": 23,
+    "name": "中級～上級",
+    "catchphrase": "手数 23 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "oHIBBMoHIoLMGAAKLNGCCKoNGoJDDoEEJoox",
+    "moves": 19,
+    "name": "中級～上級",
+    "catchphrase": "手数 19 の挑戦",
+    "exitRow": 2
+  },
+  {
+    "board": "oHIKBBoHIKLMGoAALMGCCooNGoJDDNEEJoox",
+    "moves": 14,
+    "name": "中級～上級",
+    "catchphrase": "手数 14 の挑戦",
+    "exitRow": 2
+  }
+]
